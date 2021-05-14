@@ -6,7 +6,10 @@ A simple shell based templating language
 
 ## Why
 
-All other templating languages were 1. larger than the container I was deploying, 2. Too complicated for such a simple task.
+All other templating languages were:
+
+1. larger than the container I was deploying.
+2. Too complicated for such a simple task.
 
 ## How
 
