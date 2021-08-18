@@ -1,8 +1,8 @@
-# Stache
+# Stch
 
 ## What
 
-A simple shell based templating language
+A simple shell based templating language kind of like mustache(5) and gomplate , etc but ~512 bytes vs ~30MB
 
 ## Why
 
@@ -13,7 +13,12 @@ All other templating languages were:
 
 ## How
 
-`{{}}` is env replacement, e.g. `{{HOME}}` == `$HOME`
-`{{!}}` is command replacement, e.g. `{{!echo 1}}` == `1`
+* `$()` and `\`\`` are escaped by default
+* `{{!cmd}}` is command replacement and is converted to `$(cmd)`
+* `{{>file}}` is file replacement and is converted to `$(cat file | stch)`
+* `$FOO` is replaced by the env var `$FOO`
 
-env vars substituted before command substitution
+## Gotchas/Issues
+
+* `{{>file}}` is single depth (not recursive) and is relative to the script execution
+* `{{!cmd}}` cannot be nested as this would need recursive replacement, pipe or use helper functions to manage this (patches welcome as long as it's not a loop).

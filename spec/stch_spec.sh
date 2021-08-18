@@ -1,21 +1,31 @@
+% FIXTURE: "$SHELLSPEC_HELPERDIR/fixture"
+
 Describe 'stch'
+    Describe 'Including other stch files'
+        It 'substitutes and evals the included file'
+            Data "{{>$FIXTURE/inc.stch}}"
+            When call ./stch
+            The stdout should equal foo
+            The status should be success
+        End
+        It 'exists with non-zero on invalid file'
+            Data '{{>foo}}'
+            When call ./stch
+            The stderr should include "foo: No such file or directory"
+            The status should be failure
+        End
+    End
     Describe 'Environment variable substitution'
-        Before 'export STCH_TEST="STCH_TEST"'
+        Before 'export STCH_TEST="STCH_TEST"; unset FOO'
         After 'unset STCH_TEST'
-        It 'substitutes env vars inside {{}}'
-            Data "{{STCH_TEST}}"
+        It 'substitutes env vars by default '
+            Data '$STCH_TEST'
             When call ./stch
             The stdout should equal STCH_TEST
             The status should be success
         End
-        It 'ignores shell variables'
-            Data '$STCH_TEST'
-            When call ./stch
-            The stdout should equal '$STCH_TEST'
-            The status should be success
-        End
         It 'exits with non-zero on unset env'
-            Data '{{FOO}}'
+            Data '$FOO'
             When call ./stch
             The status should be failure
         End
