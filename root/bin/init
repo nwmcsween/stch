@@ -1,19 +1,15 @@
 #!/bin/sh
 
-perr() {
-    echo "$1"
-    exit 1
-}
-
 template_file() {
-    printf "Templating stache file %s..." "$1"
-    if stache "$1" > "$2"; then
+    printf "Templating stch file %s..." "$1"
+    if stch "$1" > "$2"; then
         echo "done"
     else
-        perr "failed! for $1"
+        echo "failed! for $1" >&2
+        exit 1
     fi
 }
 
-find "${1:-/etc}" -depth -name "*.stache" | while read -r f; do
+find "${1:-/etc}" -depth -name "*.stch" | while read -r f; do
     template_file "$f" "${f%.*}"
 done
