@@ -1,6 +1,0 @@
-#!/bin/sh
-# Install latest docker-ee
-apt -y update
-apt -y install docker-ee
-
-docker run --privledged --rm alpine/make -C ../
