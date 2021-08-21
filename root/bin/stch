@@ -1,8 +1,8 @@
 #!/bin/sh
 stch() {
-# -e add escapes to $() -e add escapes to `, -e replace {{>}} with a file local to script execution, -e replace {{!}} commands
+# # include and process files with {{>}}, -e add escapes to $(cmd), -e add escapes to `cmd`, -e add escapes to $var, -e replace $$ with $, -e replace {{!}} commands
 val=$(eval "cat << EOF_\$PPID
-$(set -e; sed -e 's:{{>\s*\(.*\)\s*}}:{{!cat \1 | stch}}:g' -e 's:$(.*):\\&:g' -e 's:`:\\`:g' -e 's:{{\!\s*\(.*\)\s*}}:$(\1):g')
+$(set -e; sed -e 's:{{>\s*\(.*\)\s*}}:{{!cat \1 | stch}}:g' -e 's:$(.*):\\&:g' -e 's:`\(.*\)`:\\`\1\\`:g' -e 's:$\([[:alpha:]_]*[[:alnum:]_]*\):\\$\1:g' -e 's:$$\([[:alpha:]_]*[[:alnum:]_]*\)*:$\1:g'  -e 's:{{\!\s*\(.*\)\s*}}:$(\1):g')
 EOF_\$PPID")
 [ "$val" ] && printf "%s\n" "$val"
 }

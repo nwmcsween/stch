@@ -18,16 +18,22 @@ Describe 'stch'
     Describe 'Environment variable substitution'
         Before 'export STCH_TEST="STCH_TEST"; unset FOO'
         After 'unset STCH_TEST'
-        It 'substitutes env vars by default '
-            Data '$STCH_TEST'
+        It 'substitutes ${} with vars'
+            Data '${STCH_TEST}'
             When call ./stch
             The stdout should equal STCH_TEST
             The status should be success
         End
         It 'exits with non-zero on unset env'
-            Data '$FOO'
+            Data '${FOO}'
             When call ./stch
             The status should be failure
+        End
+        It 'doesnt interp single $ vars'
+            Data '$STCH_TEST'
+            When call ./stch
+            The stdout should equal '$STCH_TEST'
+            The status should be success
         End
     End
     Describe 'command substitution'
